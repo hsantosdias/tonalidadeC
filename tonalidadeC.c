@@ -7,10 +7,17 @@
 #define BUTTON2_GPIO 17
 #define BUTTON3_GPIO 18
 
+
+
 // Frequências para diferentes sons
 #define NOTE_C4 262  // Dó
 #define NOTE_D4 294  // Ré
 #define NOTE_E4 330  // Mi
+#define NOTE_F4 349  // Fá
+#define NOTE_G4 392  // Sol
+#define NOTE_A4 440  // Lá
+#define NOTE_B4 494  // Si
+
 
 // Função para configurar o PWM no pino especificado
 void pwm_set_frequency(uint slice_num, uint channel, float frequency) {
@@ -49,13 +56,28 @@ int main() {
     uint slice_num = pwm_gpio_to_slice_num(BUZZER_GPIO);
     uint channel = pwm_gpio_to_channel(BUZZER_GPIO);
 
+    //implementação do botão A GPIO 5 Botão A
+    const uint BUTTON_PIN_A = 5;
+    gpio_init(BUTTON_PIN_A);
+    gpio_set_dir(BUTTON_PIN_A, GPIO_IN);
+    gpio_pull_up(BUTTON_PIN_A);
+
+    //implementação do botão B GPIO 5
+    const uint BUTTON_PIN_B = 6;
+    gpio_init(BUTTON_PIN_B);
+    gpio_set_dir(BUTTON_PIN_B, GPIO_IN);
+    gpio_pull_up(BUTTON_PIN_B);
+
+
     while (true) {
-        if (!gpio_get(BUTTON1_GPIO)) {
+        if (!gpio_get(BUTTON_PIN_A)) {
             pwm_set_frequency(slice_num, channel, NOTE_C4);
-        } else if (!gpio_get(BUTTON2_GPIO)) {
+        }
+         else if (!gpio_get(BUTTON_PIN_B)) {
             pwm_set_frequency(slice_num, channel, NOTE_D4);
         } else if (!gpio_get(BUTTON3_GPIO)) {
             pwm_set_frequency(slice_num, channel, NOTE_E4);
+        
         } else {
             pwm_set_frequency(slice_num, channel, 0); // Sem som
         }
